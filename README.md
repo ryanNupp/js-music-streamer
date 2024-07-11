@@ -29,7 +29,7 @@ Frontends:
 use that data to group by artists, genres, alphabetically, etc.
 
 
-- *** web frontend (from browser) ***
+- web frontend (from browser)
 
 consider: 
 - electron app?? using the same code tbh
