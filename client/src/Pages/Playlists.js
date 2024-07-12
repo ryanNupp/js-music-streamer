@@ -1,5 +1,5 @@
 //import React, { useState, useRef } from 'react';
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 
 const Playlists = () => {
 
@@ -11,7 +11,7 @@ const Playlists = () => {
     <div>
       <h1>Playlists Page</h1>
 
-      <button onClick={sound.play()}>Music Stream</button>
+      <button onClick={() => sound.play()}>Music Stream</button>
     </div>
   );
 };

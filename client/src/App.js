@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, AppBar, Toolbar, Typography, CssBaseline, Divider } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, AppBar, Toolbar, Typography, CssBaseline, Divider, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomePage from './Pages/HomePage';
 import AlbumsPage from './Pages/Albums';
 import ArtistsPage from './Pages/Artists';
 import PlaylistsPage from './Pages/Playlists';
+import Playback from './Navigation/Playback';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
       </AppBar>
       <Router>
         <Drawer
-          variant="permanent" // Make the sidebar permanent
+          variant="permanent"
           sx={{
             width: 240,
             flexShrink: 0,
@@ -54,6 +55,18 @@ function App() {
             <Route path="/playlists" element={<PlaylistsPage />} />
           </Routes>
         </main>
+        <Box 
+          position="fixed"
+          alignItems={'center'}
+          bottom={0}
+          left="0%"
+          transform="translateX(-50%)"
+          width="100%"
+          display="flex"
+          justifyContent="center"
+        >
+          <Playback audioSrc="your-audio-file-url" />
+        </Box>
       </Router>
     </div>
   );
