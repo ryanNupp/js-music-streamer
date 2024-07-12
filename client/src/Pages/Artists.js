@@ -5,7 +5,7 @@ const Artists = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3000/artists')
+    axios.get('http://localhost:8080/artists')
       .then((response) => {
         setMessage(response.data);
       })

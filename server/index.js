@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 // const multer = require('multer');  // this will be used for 
-const fs = requrie('fs');
+const fs = require('fs');
 const app = express();
 
 const port = 8080; // port variable -- TODO: let user choose custom port
-const folder = 'temp_music_collection';
+const folder = '../temp_music_collection/Death Grips - Year of the Snitch';
 
 app.use(cors());
 

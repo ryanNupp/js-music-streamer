@@ -5,7 +5,7 @@ const Albums = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3000/albums')
+    axios.get('http://localhost:8080/albums')
       .then((response) => {
         setMessage(response.data);
       })
