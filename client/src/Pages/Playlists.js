@@ -1,39 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+//import React, { useState, useRef } from 'react';
+import {Howl, Howler} from 'howler';
 
 const Playlists = () => {
-  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    axios.get('http://localhost:8080/playlists')
-      .then((response) => {
-        setMessage(response.data);
-      })
-      .catch((error) => {
-        console.error('Error making API call:', error);
-        setMessage('Error making API call');
-      });
-  }, []);
-
-  function playMusic() {
-    axios({
-      method: 'get',
-      url: 'http://localhost:8080/stream/Death Grips - Year of the Snitch - 1 - Death Grips is Online.mp3',
-      responseType: 'stream'
-    })
-    .then(function (response) {
-      response.data.pipe()
-    });
-  }
+  var sound = new Howl({
+    src: ['http://localhost:8080/stream/Death%20Grips%20-%20Year%20of%20the%20Snitch%20-%201%20-%20Death%20Grips%20is%20Online.mp3']
+  });
 
   return (
     <div>
       <h1>Playlists Page</h1>
-      <p>{message}</p>
 
-      <button onClick={playMusic}>Play Music</button>
+      <button onClick={sound.play()}>Music Stream</button>
     </div>
   );
-}
+};
 
 export default Playlists;
