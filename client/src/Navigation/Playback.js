@@ -6,41 +6,24 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import { Howl } from 'howler';
 
-const Playback = ({ audioSrc, albumCover }) => {
-  const sound = useRef(null);
+var sound = new Howl({
+  src: ['http://localhost:8080/stream/Death%20Grips%20-%20Year%20of%20the%20Snitch%20-%201%20-%20Death%20Grips%20is%20Online.mp3'],
+  html5: true,
+  volume: 0.5,
+});
+
+var albumCover = "bruh"
+
+export default function Playback() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(50);
   const [seeking, setSeeking] = useState(false);
 
-  useEffect(() => {
-    sound.current = new Howl({
-      src: [audioSrc],
-      html5: true,
-      volume: volume / 100,
-      onplay: () => setIsPlaying(true),
-      onpause: () => setIsPlaying(false),
-      onload: () => setDuration(sound.current.duration()),
-      onend: () => setIsPlaying(false),
-      onseek: () => {
-        if (!seeking) setCurrentTime(sound.current.seek());
-      },
-    });
-
-    const intervalId = setInterval(() => {
-      if (sound.current.playing() && !seeking) setCurrentTime(sound.current.seek());
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-      sound.current.unload();
-    };
-  }, [audioSrc, volume, seeking]);
-
   const handlePlayPause = () => {
-    if (isPlaying) sound.current.pause();
-    else sound.current.play();
+    if (isPlaying) sound.pause();
+    else sound.play();
     setIsPlaying(!isPlaying);
   };
 
@@ -49,14 +32,14 @@ const Playback = ({ audioSrc, albumCover }) => {
   };
 
   const handleSliderChangeCommitted = (event, newValue) => {
-    sound.current.seek(newValue);
+    sound.seek(newValue);
     setSeeking(false);
   };
 
   const handleVolumeChange = (event, newValue) => {
     const newVolume = parseFloat(newValue);
     setVolume(newVolume);
-    sound.current.volume(newVolume / 100);
+    sound.volume(newVolume / 100);
   };
 
   const formatTime = (timeInSeconds) => {
@@ -95,5 +78,3 @@ const Playback = ({ audioSrc, albumCover }) => {
     </Box>
   );
 };
-
-export default Playback;
