@@ -6,6 +6,7 @@ const app = express();
 
 const port = 8080; // port variable -- TODO: let user choose custom port
 const folder = '../temp_music_collection/Death Grips - Year of the Snitch';
+//E:\Personal Projects\music-streamer\temp_music_collection\Death Grips - Year of the Snitch\yots-1024.jpg
 
 app.use(cors());
 
@@ -24,6 +25,17 @@ app.get('/stream/:filename', (req, res) => {
         res.status(404).send('File not found');
     }
 })
+
+app.get('/images/:filename', (req, res) => {
+    const { filename } = req.params;
+    const file = path.join(folder, filename);
+    if (fs.existsSync(file)) {
+        const imageStream = fs.createReadStream(file);
+        imageStream.pipe(res); // Stream image file to the client
+    } else {
+        res.status(404).send('Image not found');
+    }
+});
 
 //making gets for pages Albums, Artists and playlists?
 app.get('/albums', (req, res) => {
