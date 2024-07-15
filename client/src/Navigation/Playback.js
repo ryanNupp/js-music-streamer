@@ -18,6 +18,8 @@ export default function Playback() {
   const [volume, setVolume] = useState(50);
   const [position, setPosition] = useState(0);
 
+  const positionRef = useRef();
+
   const playPause = () => {
     // only be able to interact with pause/play button if song is loaded
     if (sound != null) {
@@ -29,7 +31,7 @@ export default function Playback() {
       setIsPlaying(!isPlaying);
     }
   };
-  
+
   const handleVolumeChange = (event, value) => {
     setVolume(value);
     // changed code to affect Howler global volume, rather than individual sound volume
@@ -47,10 +49,19 @@ export default function Playback() {
     }
   };
 
-  const updatePosition = () => {
-    if (isPlaying) {
-      setPosition(sound.seek());
-      requestAnimationFrame(updatePosition);
+  useEffect(() => {
+    const interval = setInterval (() => {
+      if (sound) {
+        setPosition(sound.seek());
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [sound]);
+
+  const handlePositionChange = (event, newValue) => {
+    setPosition(newValue);
+    if (sound) {
+      sound.seek(newValue)
     }
   };
 
@@ -69,15 +80,15 @@ export default function Playback() {
         {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
       </IconButton>
       <Slider
-          size="small"
-          value={position}
-          min={0}
-          step={1}
-          max={duration}
-          onChange={(_, value) => setPosition(value)}
-        />
+        size="small"
+        value={position}
+        min={0}
+        step={1}
+        max={duration/1000}
+        onChange={handlePositionChange}
+      />
       <Typography variant="body2" style={{ margin: '0 16px' }}>
-        {formatTime(0)} / {formatTime(0)}
+        {formatTime(position)} / {formatTime(duration / 1000)}
       </Typography>
       <IconButton onClick={toggleMute}>
         {volume === 0 ? <VolumeOffIcon /> : <VolumeUpIcon />}
