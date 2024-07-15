@@ -6,9 +6,11 @@ import AlbumIcon from '@mui/icons-material/Album';
 import PersonIcon from '@mui/icons-material/Person';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import HomePage from './Pages/HomePage';
-import AlbumsPage from './Pages/Albums';
-import ArtistsPage from './Pages/Artists';
-import PlaylistsPage from './Pages/Playlists';
+import AlbumsPage from './Pages/Albums'; // Make sure this path is correct
+import AlbumLists from './Pages/AlbumDetails';
+import ArtistsPage from './Pages/Artists'; // Make sure this path is correct
+import PlaylistsPage from './Pages/Playlists'; // Make sure this path is correct
+
 import Playback from './Navigation/Playback';
 
 function App() {
@@ -59,13 +61,14 @@ function App() {
           </List>
         </Drawer>
   
-        <main style={{marginTop: 10, marginLeft: 240, padding: '15px', zIndex: 1201 /* Ensure main content is above Drawer */ }}>
+        <main style={{ marginTop: 10, marginLeft: 240, padding: '15px', zIndex: 1201 /* Ensure main content is above Drawer */ }}>
           <Toolbar />
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path="/albums" element={<AlbumsPage />} />
             <Route path="/artists" element={<ArtistsPage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
+            <Route path="/albums/:albumName" element={<AlbumLists />} />
           </Routes>
         </main>
   
@@ -92,7 +95,6 @@ function App() {
       </Router>
     </div>
   );
-
 }
 
 export default App;

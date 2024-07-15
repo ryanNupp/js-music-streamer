@@ -12,7 +12,7 @@ const albumCover = "http://localhost:8080/images/yots-1024.jpg"; // Replace with
 
 const soundUrl = 'http://localhost:8080/stream/Death%20Grips%20-%20Year%20of%20the%20Snitch%20-%201%20-%20Death%20Grips%20is%20Online.mp3';
 
-export default function Playback() {
+export default function Playback({song}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [play, { pause, duration, sound }] = useSound(soundUrl);
   const [volume, setVolume] = useState(50);
@@ -79,6 +79,9 @@ export default function Playback() {
       <IconButton onClick={playPause}>
         {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
       </IconButton>
+      <Typography variant="body2" style={{ margin: '0 16px' }}>
+        {formatTime(position)} 
+        </Typography>
       <Slider
         size="small"
         value={position}
@@ -88,7 +91,7 @@ export default function Playback() {
         onChange={handlePositionChange}
       />
       <Typography variant="body2" style={{ margin: '0 16px' }}>
-        {formatTime(position)} / {formatTime(duration / 1000)}
+        {formatTime(duration / 1000)}
       </Typography>
       <IconButton onClick={toggleMute}>
         {volume === 0 ? <VolumeOffIcon /> : <VolumeUpIcon />}

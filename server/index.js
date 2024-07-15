@@ -41,30 +41,73 @@ app.get('/app/songs', (req, res) => {
         return !['.jpg', '.jpeg', '.png', '.gif'].includes(fileExtension);
       }).map(file => {
         const filePath = path.join(songsFolder, file);
-        const { artist, title } = parseSongFilename(file); // Implement this function
+        const { artist, album, songName } = parseSongFilename(file); // Use the function to parse filename
   
         return {
           filename: file,
           artist: artist,
-          title: title,
-          filePath: filePath, // optional, include any other metadata you need
+          album: album,
+          songName: songName,
+          filePath: filePath, // Optional, include any other metadata you need
         };
       });
   
-      res.json(songsData);
+      res.json(songsData); // Send JSON response with songs data
     });
   });
   
-  // Function to parse song filename and extract artist and title
   function parseSongFilename(filename) {
-    // Implement your logic to parse the filename and extract artist and title
-    // Example logic: Split filename based on delimiter or use regex to extract data
-    // Replace with actual logic based on your filenames
-    const parts = filename.split('-').map(part => part.trim());
-    const artist = parts[0]; // Assuming artist is the first part before the first dash
-    const title = parts.slice(1).join(' - ').replace('.mp3', '').trim(); // Join remaining parts and remove file extension
+    const parts = filename.replace('.mp3', '').split(' - ');
+    const artist = parts[0].trim();
+    const album = parts[1].trim(); // Assuming album is the second part
+    const songName = parts.slice(2).join(' - ').trim(); // Join remaining parts for song name
   
-    return { artist, title };
+    return { artist, album, songName };
+  }
+  app.get('/albums/:filename', (req, res) => {
+    const requestedAlbum = decodeURIComponent(req.params.filename);
+  
+    fs.readdir(songsFolder, (err, files) => {
+      if (err) {
+        console.error('Error reading songs directory:', err);
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+      }
+  
+      // Filter songs based on the requested album name
+      const songsData = files
+        .filter(file => {
+          const fileExtension = path.extname(file).toLowerCase();
+          return !['.jpg', '.jpeg', '.png', '.gif'].includes(fileExtension);
+        })
+        .filter(file => {
+          const { album } = parseSongFilename(file);
+          return album === requestedAlbum;
+        })
+        .map(file => {
+          const filePath = path.join(songsFolder, file);
+          const { artist, album, songName } = parseSongFilename(file); // Use the function to parse filename
+  
+          return {
+            filename: file,
+            artist: artist,
+            album: album,
+            songName: songName,
+            filePath: filePath, // Optional, include any other metadata you need
+          };
+        });
+  
+      res.json(songsData); // Send JSON response with filtered songs data for the requested album
+    });
+  });
+  
+  function parseSongFilename(filename) {
+    const parts = filename.replace('.mp3', '').split(' - ');
+    const artist = parts[0].trim();
+    const album = parts[1].trim(); // Assuming album is the second part
+    const songName = parts.slice(2).join(' - ').trim(); // Join remaining parts for song name
+  
+    return { artist, album, songName };
   }
 
 // Serve individual images based on filename
@@ -80,6 +123,9 @@ app.get('/images/:filename', (req, res) => {
     }
 });
 // Routes for other pages
+app.get('/albums', (req, res) => {
+    res.send('This is the Albums Page');
+});
 
 app.get('/artists', (req, res) => {
     res.send('This is the Artist Page');
