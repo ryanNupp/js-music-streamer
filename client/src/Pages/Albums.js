@@ -25,7 +25,7 @@ const Albums = () => {
 
   return (
     <div>
-      <h1>Artists Page</h1>
+      <h1>Albums Page</h1>
       {error && <p>{error}</p>}
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {songs.map(song => (
@@ -42,7 +42,7 @@ const Albums = () => {
               style={{ width: 150, height: 150, borderRadius: '20%' }}
             />
             <Typography variant="body1">{song.artist}</Typography>
-            <Typography variant="body2">{song.songName}</Typography>
+            <Typography variant="body2">{song.songname}</Typography>
           </Box>
         ))}
       </div>
