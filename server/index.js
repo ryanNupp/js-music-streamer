@@ -1,24 +1,34 @@
-const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
-const app = express();
-const path = require('path');
+import { express } from 'express';
+import cors from 'cors';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import { MusicBrainzApi } from 'musicbrainz-api';
 
-const port = 8080;
-const folder = '../temp_music_collection/Death Grips - Year of the Snitch'; // Adjust this path if necessary
-const imagesFolder = 'E:/Personal Projects/music-streamer/temp_music_collection/Death Grips - Year of the Snitch'; // Adjust this path if necessary
-const songsFolder = 'E:/Personal Projects/music-streamer/temp_music_collection/Death Grips - Year of the Snitch'; // Adjust this path if necessary
+const app = express();
+const PORT = 8080;
+const USER_MUSIC_FOLDER = '../temp_music_collection/Death Grips - Year of the Snitch';
+const mbApi = new MusicBrainzApi({
+  appName: 'PersonalMusicStreamer',
+  appVersion: '0.1.0',
+  appMail: 'ryan.nuppenau02@gmail.com'
+});
+
+// probably remove this once db & metadata pulling gets workin how we want 
+const imagesFolder = '../temp_music_collection/Death Grips - Year of the Snitch'; // Adjust this path if necessary
+const songsFolder = '../temp_music_collection/Death Grips - Year of the Snitch'; // Adjust this path if necessary
 
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send('Hello from our server!')
-});
+
+
+
+
+
 
 // Route for streaming audio
 app.get('/stream/:filename', (req, res) => {
     const { filename } = req.params;
-    const file = path.join(folder, filename);
+    const file = path.join(USER_MUSIC_FOLDER, filename);
     if (fs.existsSync(file)) {
         const audioStream = fs.createReadStream(file);
         audioStream.pipe(res); // Stream audio file to the client
@@ -90,6 +100,6 @@ app.get('/playlists', (req, res) => {
 });
 
 // Start server
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
