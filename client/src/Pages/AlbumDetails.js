@@ -27,9 +27,7 @@ const AlbumDetails = () => {
       });
   }, [albumName]); // Trigger useEffect when albumName changes
 
-  const handleSongClick = (song) => {
-    setCurrentSong(song);
-  };
+ 
 
   return (
     <div>
@@ -49,7 +47,6 @@ const AlbumDetails = () => {
                 transform: 'scale(1.05)'
               }
             }}
-            onClick={() => handleSongClick(song)}
           >
             <img
               src={`http://localhost:8080/images/yots-1024.jpg`} // Adjust the path according to your server setup
