@@ -31,7 +31,7 @@ const AlbumDetails = () => {
 
   return (
     <div>
-      <h1>{albumName}</h1>
+      <h1>{decodeURIComponent(albumName)}</h1>
       {error && <p>{error}</p>}
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {songs.map(song => (
@@ -49,7 +49,7 @@ const AlbumDetails = () => {
             }}
           >
             <img
-              src={`http://localhost:8080/images/yots-1024.jpg`} // Adjust the path according to your server setup
+              src={`http://localhost:8080/images/${encodeURIComponent(albumName)}`} // Adjust the path according to your server setup
               alt={song.songName} // Assuming songName can serve as alt text
               style={{ width: '100%', height: 'auto', borderRadius: '20%' }}
             />

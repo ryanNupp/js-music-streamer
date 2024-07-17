@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, AppBar, Toolbar, Typography, CssBaseline, Box } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, AppBar, Toolbar, Typography, CssBaseline, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AlbumIcon from '@mui/icons-material/Album';
 import PersonIcon from '@mui/icons-material/Person';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HomePage from './Pages/HomePage';
 import AlbumsPage from './Pages/Albums'; // Make sure this path is correct
 import AlbumLists from './Pages/AlbumDetails';
@@ -14,6 +15,21 @@ import PlaylistsPage from './Pages/Playlists'; // Make sure this path is correct
 import Playback from './Navigation/Playback';
 
 function App() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const loadMetadata = () => {
+    console.log('Load Metadata clicked');
+    handleMenuClose();
+  };
+
   return (
     <div className="App">
       <CssBaseline />
@@ -22,6 +38,25 @@ function App() {
           <Typography variant="h6" noWrap>
             Music App
           </Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="more"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleMenuOpen}
+            style={{ color: 'white', marginLeft: 'auto' }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={loadMetadata}>Load Metadata</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Router>
@@ -32,7 +67,6 @@ function App() {
           }}
         >
           <Toolbar />
-          
           <List component="nav">
             <ListItem button component={Link} to="/">
               <ListItemIcon>
@@ -60,7 +94,6 @@ function App() {
             </ListItem>
           </List>
         </Drawer>
-  
         <main style={{ marginTop: 10, marginLeft: 240, padding: '15px', zIndex: 1201 /* Ensure main content is above Drawer */ }}>
           <Toolbar />
           <Routes>
@@ -71,7 +104,6 @@ function App() {
             <Route path="/albums/:albumName" element={<AlbumLists />} />
           </Routes>
         </main>
-  
         <Box
           position="fixed"
           bottom={0}
