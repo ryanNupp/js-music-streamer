@@ -133,6 +133,9 @@ app.get('/images/:filename', (req, res) => {
     }
 });
 // Routes for other pages
+app.get('/albums', (req, res) => {
+    res.send('This is the Albums Page');
+});
 
 app.get('/artists', (req, res) => {
     res.send('This is the Artist Page');
