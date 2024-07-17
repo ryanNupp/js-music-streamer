@@ -94,10 +94,11 @@ app.get('/app/songs', (req, res) => {
             return !['.jpg', '.jpeg', '.png', '.gif'].includes(fileExtension);
         }).map(file => {
             const filePath = path.join(songsFolder, file);
-            const { artist, title } = parseSongFilename(file); // Implement this function
+            const { artist,album, title } = parseSongFilename(file); // Implement this function
 
             return {
                 filename: file,
+                albumName: album,
                 artist: artist,
                 title: title,
                 filePath: filePath, // optional, include any other metadata you need
@@ -114,10 +115,11 @@ function parseSongFilename(filename) {
     // Example logic: Split filename based on delimiter or use regex to extract data
     // Replace with actual logic based on your filenames
     const parts = filename.split('-').map(part => part.trim());
+    const album = parts[1];
     const artist = parts[0]; // Assuming artist is the first part before the first dash
     const title = parts.slice(1).join(' - ').replace('.mp3', '').trim(); // Join remaining parts and remove file extension
 
-    return { artist, title };
+    return { artist, album, title };
 }
 
 // Serve individual images based on filename
@@ -144,7 +146,9 @@ app.get('/artists', (req, res) => {
 app.get('/playlists', (req, res) => {
     res.send('This is the Playlist Page');
 });
-
+app.get('/home', (req, res) => {
+    res.send('This is the Home Page');
+});
 // Start server
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

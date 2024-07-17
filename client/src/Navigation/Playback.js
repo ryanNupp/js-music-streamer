@@ -8,7 +8,7 @@ import useSound from 'use-sound';
 import { Howler } from 'howler';
 
 
-const albumCover = "http://localhost:8080/images/yots-1024.jpg"; // Replace with your actual album cover URL
+const albumCover = "http://localhost:8080/images/Death Grips - Year of the Snitch.jpg"; // Replace with your actual album cover URL
 
 const soundUrl = 'http://localhost:8080/stream/Death%20Grips%20-%20Year%20of%20the%20Snitch%20-%201%20-%20Death%20Grips%20is%20Online.mp3';
 

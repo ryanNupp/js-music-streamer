@@ -43,7 +43,7 @@ const Artists = () => {
             }}
           >
             <img
-              src={`http://localhost:8080/images/yots-1024.jpg`}
+              src={`http://localhost:8080/images/Death Grips - Year of the Snitch.jpg`}
               alt={artist}
               style={{ width: 150, height: 150, borderRadius: '20%' }}
             />
