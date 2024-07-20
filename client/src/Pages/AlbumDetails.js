@@ -10,7 +10,7 @@ const AlbumDetails = () => {
 
   useEffect(() => {
     // Fetch data for the specific album using albumName
-    fetch(`http://localhost:8080/albums/${encodeURIComponent(albumName)}`)
+    fetch(`http://localhost:8080/app/songs`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -53,8 +53,7 @@ const AlbumDetails = () => {
               alt={song.songName} // Assuming songName can serve as alt text
               style={{ width: '100%', height: 'auto', borderRadius: '20%' }}
             />
-            <Typography variant="body2">{song.artist}</Typography>
-            <Typography variant="body2">{song.songName}</Typography>
+            <Typography variant="body1">{song.title}</Typography>
           </Box>
         ))}
       </div>

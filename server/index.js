@@ -117,7 +117,7 @@ function parseSongFilename(filename) {
     const parts = filename.split('-').map(part => part.trim());
     const album = parts[1];
     const artist = parts[0]; // Assuming artist is the first part before the first dash
-    const title = parts.slice(1).join(' - ').replace('.mp3', '').trim(); // Join remaining parts and remove file extension
+    const title = parts[3].replace('.mp3', '').trim(); // Join remaining parts and remove file extension
 
     return { artist, album, title };
 }
