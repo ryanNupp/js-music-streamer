@@ -10,7 +10,7 @@ const AlbumDetails = () => {
 
   useEffect(() => {
     // Fetch data for the specific album using albumName
-    fetch(`http://localhost:8080/app/songs`)
+    fetch(`http://localhost:8080/album-details/:id`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -49,7 +49,7 @@ const AlbumDetails = () => {
             }}
           >
             <img
-              src={`http://localhost:8080/images/${encodeURIComponent(albumName)}`} // Adjust the path according to your server setup
+              src={`http://localhost:8080/${encodeURIComponent(albumName)}`} // Adjust the path according to your server setup
               alt={song.songName} // Assuming songName can serve as alt text
               style={{ width: '100%', height: 'auto', borderRadius: '20%' }}
             />
