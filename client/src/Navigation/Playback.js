@@ -7,11 +7,9 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import useSound from 'use-sound';
 import { Howler } from 'howler';
 
-//var currentSong;
-
-export default function Playback(soundUrl) {
+export default function Playback(songUrl) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [play, { pause, duration, sound }] = useSound(soundUrl);
+  const [play, { pause, duration, sound }] = useSound(songUrl);
   const [volume, setVolume] = useState(50);
   const [position, setPosition] = useState(0);
 
