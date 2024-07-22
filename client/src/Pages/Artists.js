@@ -50,7 +50,6 @@ const Artists = () => {
               }
             }}
           >
-          
             <Typography variant="body1">{artist.artists}</Typography>
           </Box>
           </Link>

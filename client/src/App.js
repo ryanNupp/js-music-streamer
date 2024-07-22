@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, AppBar, Toolbar, Typography, CssBaseline, Box, IconButton, Menu, MenuItem} from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, AppBar, Toolbar, Typography, CssBaseline, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AlbumIcon from '@mui/icons-material/Album';
 import PersonIcon from '@mui/icons-material/Person';
@@ -68,7 +68,6 @@ function App() {
           }}
         >
           <Toolbar />
-          
           <List component="nav">
             <ListItem button component={Link} to="/">
               <ListItemIcon>
@@ -96,7 +95,6 @@ function App() {
             </ListItem>
           </List>
         </Drawer>
-  
         <main style={{ marginTop: 10, marginLeft: 240, padding: '15px', zIndex: 1201 /* Ensure main content is above Drawer */ }}>
           <Toolbar />
           <Routes>
@@ -108,7 +106,6 @@ function App() {
             <Route path="/albumsDetails" element={<AlbumDetails/>} />
           </Routes>
         </main>
-  
         <Box
           position="fixed"
           bottom={0}
