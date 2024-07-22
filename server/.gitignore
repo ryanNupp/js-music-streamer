@@ -3,4 +3,7 @@
 
 # files program creates
 /db/*
+!/db
+
 /images/*
+!/images
