@@ -8,11 +8,11 @@ import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HomePage from './Pages/HomePage';
 import AlbumsPage from './Pages/Albums'; // Make sure this path is correct
-import AlbumLists from './Pages/AlbumDetails';
 import ArtistsPage from './Pages/Artists'; // Make sure this path is correct
 import PlaylistsPage from './Pages/Playlists'; // Make sure this path is correct
-
 import Playback from './Navigation/Playback';
+import ArtistAlbum from './Pages/ArtistAlbums';
+import AlbumDetails from './Pages/AlbumDetails';
 
 function App() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -26,10 +26,11 @@ function App() {
   };
 
   const loadMetadata = () => {
-    console.log('Load Metadata clicked');
+    console.log('Music Library Scanned');
+    fetch('http://localhost:8080/find-new-albums');
     handleMenuClose();
   };
-
+  
   return (
     <div className="App">
       <CssBaseline />
@@ -55,7 +56,7 @@ function App() {
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
           >
-            <MenuItem onClick={loadMetadata}>Load Metadata</MenuItem>
+            <MenuItem onClick={loadMetadata}>Scan Music Library</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
@@ -101,7 +102,8 @@ function App() {
             <Route path="/albums" element={<AlbumsPage />} />
             <Route path="/artists" element={<ArtistsPage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
-            <Route path="/albums/:albumName" element={<AlbumLists />} />
+            <Route path="/albumsAritst" element={<ArtistAlbum />} />
+            <Route path="/albumsDetails" element={<AlbumDetails/>} />
           </Routes>
         </main>
         <Box

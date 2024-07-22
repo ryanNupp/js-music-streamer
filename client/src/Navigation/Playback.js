@@ -7,12 +7,9 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import useSound from 'use-sound';
 import { Howler } from 'howler';
 
+//var currentSong;
 
-const albumCover = "http://localhost:8080/images/Death Grips - Year of the Snitch.jpg"; // Replace with your actual album cover URL
-
-const soundUrl = 'http://localhost:8080/stream/Death%20Grips%20-%20Year%20of%20the%20Snitch%20-%201%20-%20Death%20Grips%20is%20Online.mp3';
-
-export default function Playback({song}) {
+export default function Playback(soundUrl) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [play, { pause, duration, sound }] = useSound(soundUrl);
   const [volume, setVolume] = useState(50);
@@ -70,7 +67,7 @@ export default function Playback({song}) {
   return (
     <Box display="flex" alignItems="center" p={1.5} bgcolor="#f4f4f4" borderRadius="10px" boxShadow="0 2px 10px rgba(0,0,0,0.1)" width={600}>
       <Box mr={2}>
-        <img src={albumCover} alt="Loading..." style={{ width: 50, height: 50, borderRadius: '20%' }} />
+        <img alt="Loading..." style={{ width: 50, height: 50, borderRadius: '20%' }} />
       </Box>
       <IconButton onClick={playPause}>
         {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
