@@ -68,21 +68,17 @@ async function addAlbumMetadata(albumFolderName) {
     releaseMBIDs.forEach((releaseMBID, index) => {
         releaseMBIDs[index] = releaseMBID['id'];
     });
+
     let imagePath = null;
-
-    for (const releaseMbid of releaseMBIDs) {
-        imagePath = await downloadImage(releaseMbid, albumFolderName);
-        if (imagePath) {
-            break; // If an image is found, exit the loop
-        }
+    for (const releaseMBID of releaseMBIDs) {
+        imagePath = await downloadImage(releaseMBID, albumFolderName);
+        if (imagePath) break;
     }
-
     if (!imagePath) {
         console.log(`No valid images found for album ${albumFolderName}`);
-        // Optionally, you can return or handle the situation where no image is found
-        // For example, set imagePath to a default image or leave it as null
-        
+        imagePath = "./no-image.jpg";
     }
+
     // TODO: insert all the stuff above into a new db entry in the 'Albums' table
     const newAlbum = db.prepare(`
         INSERT INTO Albums (album_folder, title, mbids, release_date, artists, image_path)
@@ -91,45 +87,21 @@ async function addAlbumMetadata(albumFolderName) {
     newAlbum.run(albumFolderName, albumName, JSON.stringify(releaseMBIDs), releaseDate, JSON.stringify(artists), imagePath);
 }
 
-// Download an image from CAA given an MBID
-async function downloadImage(releaseMbid, albumFolderName) {
+async function downloadImage(releaseMBID, albumFolderName) {
     try {
-        const releaseCoverInfo = await caaApi.getReleaseCovers(releaseMbid);
+        const releaseCoverInfo = await caaApi.getReleaseCovers(releaseMBID);
+        const caaImageUrl = releaseCoverInfo.images[0].image;
+        const localImageName = albumFolderName + caaImageUrl.slice(-4);
+        const response = await axios.get(caaImageUrl, { responseType: 'arraybuffer' });
 
-        if (!releaseCoverInfo || !releaseCoverInfo.images.length) {
-            console.log(`No images found for MBID ${releaseMbid}`);
-            return null; // No image found, return null
-        }
-
-        for (const imageInfo of releaseCoverInfo.images) {
-            try {
-                const caaImageUrl = imageInfo.image;
-                const imageFileExtension = path.extname(caaImageUrl);
-
-                // download the file
-                const response = await axios.get(caaImageUrl, { responseType: 'arraybuffer' });
-                
-                if (response.status === 200) {
-                    const imagePath = `${IMAGE_FOLDER}/${albumFolderName}${imageFileExtension}`;
-                    fs.writeFileSync(imagePath, response.data);
-                    console.log(`Image downloaded: ${imagePath}`);
-                    return imagePath; // Return the path of the downloaded image
-                }
-            } catch (downloadError) {
-                if (downloadError.response && downloadError.response.status === 404) {
-                    console.error(`Image URL ${imageInfo.image} not found (404)`);
-                    // Continue with the next image if available
-                } else {
-                    console.error(`Error downloading image from URL ${imageInfo.image}:`, downloadError);
-                    // Continue with the next image if available
-                }
-            }
-        }
-
-        console.log(`No valid images found for MBID ${releaseMbid}`);
-        return null; // Return null if no valid images found
-    } catch (error) {
-        console.error(`Error fetching images for MBID ${releaseMbid}:`, error);
-        return null; // Return null if there's an error fetching images
-    }
+        fs.writeFile(IMAGE_FOLDER + "/" + localImageName, response.data, (err) => {
+            if (err) throw err;
+            console.log(`Image downloaded: ${localImageName}`);
+        });
+    
+        return `${localImageName}`;
+    } catch (err) {
+        console.error(`Error saving image - MBID: ${releaseMBID} - Album: ${albumFolderName}`);
+        return null;
+    };
 }
