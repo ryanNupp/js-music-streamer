@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import 'dotenv/config';
 import checkNewAlbums from './metadata.js'
-import { getAlbums, getArtists, getAlbumsByArtist } from './localaccess.js';
+import { getAlbums, getArtists, getAlbumsByArtist, getAlbumSongs } from './localaccess.js';
 
 const app = express();
 const PORT = Number(process.env.PORT);
@@ -17,6 +17,12 @@ app.get('/find-new-albums', () => {  checkNewAlbums();  });
 
 // Get list of all albums
 app.get('/albums', (req, res) => {  res.json(getAlbums())  });
+
+//get 
+app.get('/albums/*', (req, res) => {  const album = decodeURIComponent(req.params.artist);
+    res.json(getAlbumSongs(album))  
+
+});
 
 //get all artists 
 app.get('/artists', (req, res) => {  res.json(getArtists())  });
@@ -31,7 +37,15 @@ app.get('/albumsAritst/*', (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
+// get songs off a specified album
+app.get('/album-details/:id', (req, res) => {
+    try {
+        const songs  = getAlbumSongs(album);
+        res.json(songs); // Send albums data as JSON
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 // Route for streaming audio
 app.get('/stream/*', (req, res) => {
     const filepath  = decodeURIComponent(req.params[0]);
@@ -55,6 +69,16 @@ app.get('/images/:filename', (req, res) => {
         imageStream.pipe(res); // Stream image file to the client
     } else {
         res.status(404).send('Image not found');
+    }
+});
+//get track details
+app.get('/trackDetails/:trackId', (req, res) => {
+    const trackId = decodeURIComponent(req.params.trackId);
+    try {
+        const trackDetails = getTrackDetailsById(trackId); // A function to fetch track details from your database
+        res.json(trackDetails);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 
