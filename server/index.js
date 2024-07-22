@@ -31,6 +31,7 @@ app.get('/albumsAritst/*', (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 // Route for streaming audio
 app.get('/stream/*', (req, res) => {
     const filepath  = decodeURIComponent(req.params[0]);

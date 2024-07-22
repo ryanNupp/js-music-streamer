@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 
 const Albums = () => {
   const [albums, setAlbums] = useState([]);
