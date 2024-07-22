@@ -1,19 +1,36 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, AppBar, Toolbar, Typography, CssBaseline, Box } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, AppBar, Toolbar, Typography, CssBaseline, Box, IconButton, Menu, MenuItem} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AlbumIcon from '@mui/icons-material/Album';
 import PersonIcon from '@mui/icons-material/Person';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HomePage from './Pages/HomePage';
 import AlbumsPage from './Pages/Albums'; // Make sure this path is correct
-import AlbumLists from './Pages/AlbumDetails';
 import ArtistsPage from './Pages/Artists'; // Make sure this path is correct
 import PlaylistsPage from './Pages/Playlists'; // Make sure this path is correct
-
 import Playback from './Navigation/Playback';
+import ArtistAlbum from './Pages/ArtistAlbums';
+import AlbumDetails from './Pages/AlbumDetails';
 
 function App() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const loadMetadata = () => {
+    console.log('Music Library Scanned');
+    fetch('http://localhost:8080/find-new-albums');
+    handleMenuClose();
+  };
+  
   return (
     <div className="App">
       <CssBaseline />
@@ -22,6 +39,25 @@ function App() {
           <Typography variant="h6" noWrap>
             Music App
           </Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="more"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleMenuOpen}
+            style={{ color: 'white', marginLeft: 'auto' }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={loadMetadata}>Scan Music Library</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Router>
@@ -68,7 +104,8 @@ function App() {
             <Route path="/albums" element={<AlbumsPage />} />
             <Route path="/artists" element={<ArtistsPage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
-            <Route path="/albums/:albumName" element={<AlbumLists />} />
+            <Route path="/albumsAritst" element={<ArtistAlbum />} />
+            <Route path="/albumsDetails" element={<AlbumDetails/>} />
           </Routes>
         </main>
   

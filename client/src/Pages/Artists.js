@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
+import { Link } from 'react-router-dom'; 
 
 const Artists = () => {
   const [artists, setArtists] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/app/songs')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        const uniqueArtists = [...new Set(data.map(song => song.artist))];
-        setArtists(uniqueArtists);
-      })
-      .catch(error => {
-        console.error('Error fetching songs:', error);
-        setError('Error fetching songs');
-      });
-  }, []);
+    const fetchArtists = async () => {
+      try {
+          const response = await fetch('http://localhost:8080/artists');
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          setArtists(data);
+      } catch (error) {
+          console.error('Error fetching artists:', error);
+          setError(error);
+      }
+   
+  };
+
+  fetchArtists();
+}, []);
+
 
   return (
     <div>
@@ -29,6 +32,11 @@ const Artists = () => {
       {error && <p>{error}</p>}
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {artists.map((artist, index) => (
+            <Link 
+            key={index} 
+            to={`/albumsArtists/${encodeURIComponent(artist)}`} 
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
           <Box
             key={index}
             m={2}
@@ -42,13 +50,10 @@ const Artists = () => {
               }
             }}
           >
-            <img
-              src={`http://localhost:8080/images/yots-1024.jpg`}
-              alt={artist}
-              style={{ width: 150, height: 150, borderRadius: '20%' }}
-            />
-            <Typography variant="body1">{artist}</Typography>
+          
+            <Typography variant="body1">{artist.artists}</Typography>
           </Box>
+          </Link>
         ))}
       </div>
     </div>
