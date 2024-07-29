@@ -35,56 +35,35 @@ export default function checkNewAlbums() {
     });
 }
 
-// album entry in database stores an array of all MBIDs to releases related to the release-group
-// shift the array so we download the image of the next release
-// move array[0] to the back so user can continuously shuffle through all the album cover arts
-//
-// then replace the image in the images folder with the cover art for MBID stored at array[0]
-////////////export function shiftImage(albumFolderName) {
-// array = somehow get the releaseMBIDs array from album entry in the database
-// array.push(array.shift())    // this would remove first element of array, and then push it to the back.
-//                                 what was array[1] before would now become array[0] 
-// replace db entry releaseMBIDs array with this new array after its all shifted around
-//
-// now download & replace new image
-// downloadImage(array[0], albumFolderName)
-
-
 // Searches and pulls album metadata using MusicBrainz API
 // Adds new album entry to database
 async function addAlbumMetadata(albumFolderName) {
+    // find musicbrainz release group of album
     let searchResult = await mbApi.search('release-group', { query: albumFolderName });
-    const releaseGroup = searchResult['release-groups'].find(group => group['primary-type'] === "Album")
+    const releaseGroup = searchResult['release-groups'].find(group => group['primary-type'] === "Album");
+    const releaseGroupId = releaseGroup['id'];
     const albumName = releaseGroup['title'];
     const releaseDate = releaseGroup['first-release-date'];
     const artists = [];
     releaseGroup['artist-credit'].forEach(artist => {
         artists.push(artist.name);   
     });
-    const releaseMBIDs = releaseGroup['releases'].filter(release => 
-        release['title'] === albumName &&
-        release['status'] === 'Official'
-    );
-    releaseMBIDs.forEach((releaseMBID, index) => {
-        releaseMBIDs[index] = releaseMBID['id'];
-    });
 
-    let imagePath = null;
-    for (const releaseMBID of releaseMBIDs) {
-        imagePath = await downloadImage(releaseMBID, albumFolderName);
-        if (imagePath) break;
-    }
-    if (!imagePath) {
-        console.log(`No valid images found for album ${albumFolderName}`);
-        imagePath = "./no-image.jpg";
-    }
+    // now search through all releases in the release group, find a digital release
+    searchResult = await mbApi.search('release', { query: `rgid:${releaseGroupId}` });
+    const release = searchResult['releases'].find(release => release.media[0].format === "Digital Media");
+    const releaseId = release['id'];
+    const trackCount = release['track-count'];
 
-    // TODO: insert all the stuff above into a new db entry in the 'Albums' table
+    // download album image & create new row in Albums table in the db
+    let imagePath = await downloadImage(releaseId, albumFolderName)
     const newAlbum = db.prepare(`
-        INSERT INTO Albums (album_folder, title, mbids, release_date, artists, image_path)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO Albums (album_folder, title, release_date, artists, release_group_mbid, release_mbid, image_path)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    newAlbum.run(albumFolderName, albumName, JSON.stringify(releaseMBIDs), releaseDate, JSON.stringify(artists), imagePath);
+    newAlbum.run(albumFolderName, albumName, releaseDate, JSON.stringify(artists), releaseGroupId, releaseId, imagePath);
+
+    // TODO: using API pull album tracklisting, relate to local files, add to the song database
 }
 
 async function downloadImage(releaseMBID, albumFolderName) {
