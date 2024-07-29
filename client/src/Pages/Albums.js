@@ -35,7 +35,7 @@ return (
       {albums.map((album, index) => (
         <Link 
           key={index} 
-          to={`/album-details/${encodeURIComponent(album.id)}`} 
+          to={`/album-details/${encodeURIComponent(album.title)}`} 
           style={{ textDecoration: 'none', color: 'inherit' }}
         >
           <Box

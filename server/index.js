@@ -29,9 +29,10 @@ app.get('/artists', (req, res) => {  res.json(getArtists())  });
 
 //get albums by artist
 app.get('/albumsArtist/:artist', (req, res) => {
-    const artistName = decodeURIComponent(req.params.artist);
+    const artists = decodeURIComponent(req.params.artist);
+    console.log(artists);
     try {
-        const albums = getAlbumsByArtist(artistName);
+        const albums = getAlbumsByArtist(artists);
         res.json(albums); // Send albums data as JSON
     } catch (error) {
         res.status(500).json({ error: error.message });

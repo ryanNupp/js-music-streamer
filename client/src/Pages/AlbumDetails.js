@@ -10,7 +10,7 @@ const AlbumDetails = () => {
 
   useEffect(() => {
     // Fetch data for the specific album using albumName
-    fetch(`http://localhost:8080/album-details/:id`)
+    fetch(`http://localhost:8080/album-details/${encodeURIComponent(albumName)}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

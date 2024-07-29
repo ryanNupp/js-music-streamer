@@ -15,10 +15,17 @@ export function getArtists(){
     return info;
 };
 export function getAlbumsByArtist(artist) {
-    const stmt = db.prepare('SELECT title, image_path FROM Albums WHERE artists = ?'); 
-    const info = stmt.all(artist);
+    // Ensure the input is correctly formatted for the SQL query
+    const formattedArtist = `%${artist}%`;
+
+    // Prepare the query with the LIKE operator for partial matching
+    const stmt = db.prepare('SELECT title, image_path FROM Albums WHERE artists LIKE ?');
+    
+    // Execute the query with the formatted input
+    const info = stmt.all(formattedArtist);
+    console.log(info); // Debugging: log the result
     return info;
-};
+}
 export function getAlbumSongs(album){
     // const stmt = db.prepare('SELECT track, image_path FROM Albums WHERE album = ?'); // Adjust the query as needed
     // const info = stmt.all(album);
