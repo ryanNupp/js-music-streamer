@@ -12,11 +12,10 @@ export function getAlbums() {
 export function getArtists(){
     const stmt = db.prepare('SELECT artists FROM Albums'); // Adjust the query as needed
     const info = stmt.all();
-    console.log(info);
     return info;
 };
-export function getAlbumsByArtist(artist){
-    const stmt = db.prepare('SELECT title, image_path FROM Albums WHERE artist = ?'); // Adjust the query as needed
+export function getAlbumsByArtist(artist) {
+    const stmt = db.prepare('SELECT title, image_path FROM Albums WHERE artists = ?'); 
     const info = stmt.all(artist);
     return info;
 };
