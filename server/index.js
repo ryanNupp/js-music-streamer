@@ -30,7 +30,6 @@ app.get('/artists', (req, res) => {  res.json(getArtists())  });
 //get albums by artist
 app.get('/albumsArtist/:artist', (req, res) => {
     const artists = decodeURIComponent(req.params.artist);
-    console.log(artists);
     try {
         const albums = getAlbumsByArtist(artists);
         res.json(albums); // Send albums data as JSON
@@ -39,10 +38,13 @@ app.get('/albumsArtist/:artist', (req, res) => {
     }
 });
 // get songs off a specified album
-app.get('/album-details/:id', (req, res) => {
+app.get('/album-details/:album', (req, res) => {
+    const album = decodeURIComponent(req.params.album);
+    console.log(album);
     try {
         const songs  = getAlbumSongs(album);
-        res.json(songs); // Send albums data as JSON
+        res.json(songs);
+        console.log(songs);// Send albums data as JSON
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

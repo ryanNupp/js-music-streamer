@@ -1,65 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
-import Playback from '../Navigation/Playback';
-const AlbumDetails = () => {
-  const { albumName } = useParams(); // Get albumName from URL parameter
-  const [songs, setSongs] = useState([]);
+import { Link, useParams } from 'react-router-dom';
+
+const AlbumsDisplay = () => {
+  const { album } = useParams();
+  const [tracks, setTracks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentSong, setCurrentSong] = useState(null);
 
   useEffect(() => {
-    // Fetch data for the specific album using albumName
-    fetch(`http://localhost:8080/album-details/${encodeURIComponent(albumName)}`)
-      .then(response => {
+    const fetchTracks = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/album-details/${encodeURIComponent(album)}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Fetched songs:', data); // For debugging
-        setSongs(data);
-      })
-      .catch(error => {
-        console.error('Error fetching songs:', error);
-        setError('Error fetching songs');
-      });
-  }, [albumName]); // Trigger useEffect when albumName changes
+        const data = await response.json();
+        setTracks(data);
+      } catch (error) {
+        console.error('Error fetching Tracks:', error);
+        setError('Failed to load Tracks');
+      } finally {
+        setLoading(false);
+      }
+    };
 
- 
+    fetchTracks();
+  }, [album]);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div>
-      <h1>{decodeURIComponent(albumName)}</h1>
+      <h1>Songs</h1>
       {error && <p>{error}</p>}
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {songs.map(song => (
-          <Box
-            key={song.filename}
-            m={2}
-            p={2}
-            borderRadius={10}
-            boxShadow="0 2px 5px rgba(0,0,0,0.1)"
-            style={{ maxWidth: 180, textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
-            sx={{
-              '&:hover': {
-                transform: 'scale(1.05)'
-              }
-            }}
+        {tracks.map((track, index) => (
+          <Link 
+            key={index} 
+            to={`/stream/${encodeURIComponent(track.title)}`} 
+            style={{ textDecoration: 'none', color: 'inherit' }}
           >
-            <img
-              src={`http://localhost:8080/${encodeURIComponent(albumName)}`} // Adjust the path according to your server setup
-              alt={song.songName} // Assuming songName can serve as alt text
-              style={{ width: '100%', height: 'auto', borderRadius: '20%' }}
-            />
-            <Typography variant="body1">{song.title}</Typography>
-          </Box>
+            <Box
+              m={2}
+              p={2}
+              borderRadius={10}
+              boxShadow="0 2px 5px rgba(0,0,0,0.1)"
+              style={{ maxWidth: 180, textAlign: 'center', cursor: 'pointer', transition: 'transform 0.2s' }}
+              sx={{
+                '&:hover': {
+                  transform: 'scale(1.05)'
+                }
+              }}
+            >
+              <Typography variant="body2">{track.file_name}</Typography>
+            </Box>
+          </Link>
         ))}
       </div>
-      {currentSong && <Playback song={currentSong} />}
     </div>
   );
 };
 
-export default AlbumDetails;
+export default AlbumsDisplay;
