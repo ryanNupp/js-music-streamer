@@ -17,10 +17,11 @@ db.prepare(`CREATE TABLE IF NOT EXISTS Albums (
 
 // Songs table
 db.prepare(`CREATE TABLE IF NOT EXISTS Songs (
-    track_name TEXT NOT NULL,
+    file_name TEXT NOT NULL PRIMARY KEY,
+    track_name TEXT,
     position INTEGER,
-    album_title TEXT,
-    FOREIGN KEY(album_title) REFERENCES Albums(title)
+    album_folder TEXT,
+    FOREIGN KEY(album_folder) REFERENCES Albums(album_folder)
 );`).run();
 
 export default function getDB() {
