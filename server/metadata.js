@@ -63,14 +63,39 @@ async function addAlbumMetadata(albumFolderName) {
     `);
     newAlbum.run(albumFolderName, albumName, releaseDate, JSON.stringify(artists), releaseGroupId, releaseId, imagePath);
 
-    // TODO: using API pull album tracklisting, relate to local files, add to the song database
+    // add each track file to songs table
+    const songFiles = fs.readdirSync(`${MUSIC_FOLDER}/${albumFolderName}`);
+    songFiles.forEach(async file => {
+        const ext = path.extname(file);
+        if (fs.lstatSync(`${MUSIC_FOLDER}/${albumFolderName}/${file}`).isFile() &&
+            ext == '.mp3'   ||
+            ext == '.mpeg'  ||
+            ext == '.opus'  ||
+            ext == '.ogg'   ||
+            ext == '.oga'   ||
+            ext == '.wav'   ||
+            ext == '.aac'   ||
+            ext == '.caf'   ||
+            ext == '.m4a'   ||
+            ext == '.mp4'   ||
+            ext == '.weba'  ||
+            ext == '.webm'  ||
+            ext == '.dolby' ||
+            ext == '.flac'  ) {   // there has gotta be a better way to do this....
+
+            db.prepare(`
+                INSERT INTO Songs (file_name, album_folder)
+                VALUES (?, ?)
+            `).run(file, albumFolderName);
+        }
+    });
 }
 
 async function downloadImage(releaseMBID, albumFolderName) {
     try {
         const releaseCoverInfo = await caaApi.getReleaseCovers(releaseMBID);
         const caaImageUrl = releaseCoverInfo.images[0].image;
-        const localImageName = albumFolderName + caaImageUrl.slice(-4);
+        const localImageName = albumFolderName + path.extname(caaImageUrl);
         const response = await axios.get(caaImageUrl, { responseType: 'arraybuffer' });
 
         fs.writeFile(IMAGE_FOLDER + "/" + localImageName, response.data, (err) => {
