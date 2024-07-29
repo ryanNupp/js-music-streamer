@@ -51,7 +51,7 @@ return (
             }}
           >
             <img
-              src={`http://localhost:8080/${album.image_path}`}
+              src={`http://localhost:8080/images/${album.image_path}`}
               alt={album.title} // Assuming album name can serve as alt text
               style={{ width: '100%', height: 'auto', borderRadius: '20%' }}
             />

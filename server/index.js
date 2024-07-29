@@ -28,7 +28,7 @@ app.get('/albums/*', (req, res) => {  const album = decodeURIComponent(req.param
 app.get('/artists', (req, res) => {  res.json(getArtists())  });
 
 //get albums by artist
-app.get('/albumsAritst/*', (req, res) => {
+app.get('/albumsArtist/:artist', (req, res) => {
     const artistName = decodeURIComponent(req.params.artist);
     try {
         const albums = getAlbumsByArtist(artistName);

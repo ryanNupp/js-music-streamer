@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const AlbumsDisplay = () => {
   const { artist } = useParams();
@@ -12,7 +11,7 @@ const AlbumsDisplay = () => {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/albumsAritst${encodeURIComponent(artist)}`);
+        const response = await fetch(`http://localhost:8080/albumsArtist/${encodeURIComponent(artist)}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -39,7 +38,7 @@ const AlbumsDisplay = () => {
         {albums.map((album, index) => (
           <Link 
             key={index} 
-            to={`/albums/${encodeURIComponent(album.title)}`} 
+            to={`/album-details/${encodeURIComponent(album.title)}`} 
             style={{ textDecoration: 'none', color: 'inherit' }}
           >
             <Box
@@ -56,7 +55,7 @@ const AlbumsDisplay = () => {
             >
               <img
                 src={`http://localhost:8080/images/${album.image_path}`}
-                alt={album.title} // Assuming album name can serve as alt text
+                alt={album.title}
                 style={{ width: '100%', height: 'auto', borderRadius: '20%' }}
               />
               <Typography variant="body2">{album.title}</Typography>
