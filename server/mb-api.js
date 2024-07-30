@@ -6,7 +6,7 @@ const APP_NAME = process.env.APP_NAME;
 const APP_VERSION = process.env.APP_VERSION;
 const APP_MAIL = process.env.APP_MAIL;
 const limiter = new Bottleneck({
-    minTime: 1000
+    minTime: 1000   // 1 request per second (as per MusicBrainz API rules)
 });
 
 export async function mbApiSearch(queryType, query) {
@@ -35,4 +35,4 @@ export async function mbApiLookup(lookupRequest, id, ...inc) {
     return response.data;
 }
 
-// TODO write function to download images from Cover Art Archive API (reduce reliance on musicbrainz-api since it doesn't work half the time)
+// TODO: write function to download images from Cover Art Archive API (reduce package count & reliance on musicbrainz-api since it doesn't work half the time)
