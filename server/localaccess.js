@@ -5,7 +5,7 @@ import getDB from './database.js';
 const db = getDB();
 
 export function getAlbums() {
-    const stmt = db.prepare('SELECT title, image_path FROM Albums'); // Adjust the query as needed
+    const stmt = db.prepare('SELECT title, image_file FROM Albums'); // Adjust the query as needed
     const info = stmt.all();
     return info;
 };
@@ -19,11 +19,11 @@ export function getAlbumsByArtist(artist) {
     const formattedArtist = `%${artist}%`;
 
     // Prepare the query with the LIKE operator for partial matching
-    const stmt = db.prepare('SELECT title, image_path FROM Albums WHERE artists LIKE ?');
+    const stmt = db.prepare('SELECT title, image_file FROM Albums WHERE artists LIKE ?');
     
     // Execute the query with the formatted input
     const info = stmt.all(formattedArtist);
-    console.log(info); // Debugging: log the result
+    //console.log(info); // Debugging: log the result
     return info;
 }
 export function getAlbumSongs(album){

@@ -8,20 +8,26 @@ db.pragma('journal_mode = WAL')
 db.prepare(`CREATE TABLE IF NOT EXISTS Albums ( 
     album_folder TEXT PRIMARY KEY,
     title TEXT,
-    release_date TEXT,
+    release_year TEXT,
     artists TEXT,
     release_group_mbid TEXT,
     release_mbid TEXT,
-    image_path TEXT
+    image_file TEXT
 );`).run();
 
-// Songs table
-db.prepare(`CREATE TABLE IF NOT EXISTS Songs (
-    file_name TEXT NOT NULL PRIMARY KEY,
-    track_name TEXT,
-    position INTEGER,
+// Tracks table
+db.prepare(`CREATE TABLE IF NOT EXISTS Tracks (
+    filename TEXT NOT NULL PRIMARY KEY,
     album_folder TEXT,
-    FOREIGN KEY(album_folder) REFERENCES Albums(album_folder)
+    title TEXT,
+    position INTEGER,
+    disc INTEGER,
+    artists TEXT,
+    genres TEXT,
+    album TEXT,
+    albumartist TEXT,
+    year TEXT,
+    FOREIGN KEY (album_folder) REFERENCES Albums (album_folder)
 );`).run();
 
 export default function getDB() {

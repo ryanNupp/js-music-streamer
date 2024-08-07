@@ -9,6 +9,8 @@ const limiter = new Bottleneck({
     minTime: 1000   // 1 request per second (as per MusicBrainz API rules)
 });
 
+// get data from a search request on musicbrainz api
+// (rate limited 1 req/sec according to their rules using Bottleneck)
 export async function mbApiSearch(queryType, query) {
     const response = await limiter.schedule(() => {
         return axios.get(`https://musicbrainz.org/ws/2/${queryType}/?query=${query}&fmt=json`, {
@@ -18,8 +20,9 @@ export async function mbApiSearch(queryType, query) {
     return response.data;
 }
 
+// get data from a lookup request on musicbrainz api
+// (rate limited 1 req/sec according to their rules using Bottleneck)
 export async function mbApiLookup(lookupRequest, id, ...inc) {
-    // all inc to string, to go in url
     let incString = "";
     inc.forEach(incVal => {
         incString+=incVal
@@ -35,4 +38,9 @@ export async function mbApiLookup(lookupRequest, id, ...inc) {
     return response.data;
 }
 
-// TODO: write function to download images from Cover Art Archive API (reduce package count & reliance on musicbrainz-api since it doesn't work half the time)
+// get cover art archive api info on a release given it's MBID
+// for time being, no rate limiting for cover art archive (CAA has no rate limiting rules)
+export async function caaApiGetCovers(id) {
+    const response = await axios.get(`https://coverartarchive.org/release/${id}`);
+    return response.data;
+}

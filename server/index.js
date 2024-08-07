@@ -6,10 +6,11 @@ import 'dotenv/config';
 import checkNewAlbums from './metadata.js'
 import { getAlbums, getArtists, getAlbumsByArtist, getAlbumSongs } from './localaccess.js';
 
-const app = express();
 const PORT = Number(process.env.PORT);
 const MUSIC_FOLDER = process.env.MUSIC_FOLDER;
 const IMAGE_FOLDER = process.env.IMAGE_FOLDER;
+
+const app = express();
 app.use(cors());
 
 // Add new albums in music library
@@ -72,6 +73,7 @@ app.get('/images/:filename', (req, res) => {
         res.status(404).send('Image not found');
     }
 });
+
 //get track details
 app.get('/trackDetails/:trackId', (req, res) => {
     const trackId = decodeURIComponent(req.params.trackId);
