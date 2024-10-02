@@ -1,37 +1,15 @@
 # music-streamer
-Self-hosted music streaming service. Host backend on your own server, use frontends to connect and stream your own music files as you please.
+JavaScript self-hosted web music streaming service.
 
+Backend - NodeJS + ExpressJS
+Frontend - React JS frontend designed with Tailwind CSS, uses HTML5 audio elements
 
-IDEA:
+Features:
+- Utilize locally stored music files to stream from backend to frontend client connections
+- Grab music file metadata to store in a local SQLite database file
+- Frontend can access metadata from backend to display to the user
+- Working queue system to queue up multiple songs to play through
+- Client can queue albums or individual songs to play through
 
-overall focus: allow people to install the backend server on their own computers as they please,
-use our frontend apps to connect to their own hosted server
-
-
-Backend:
-
-- Host the server
-- Take connections, serve music files
-	- Stream them somehow
-- Find music files in the local server computer’s 
-- pull data from some free online music database, place in a local database or smth
-	- album art
-	- genres
-	- etc.
-
-
-Frontends:
-- Look cool and play music
-- play/pause
-- scrub through any point in the song
-
-
-use that data to group by artists, genres, alphabetically, etc.
-
-
-- web frontend (from browser)
-
-consider: 
-- electron app?? using the same code tbh
-- iOS app
-- Android app
+Future release plan:
+- Mobile app - (potentially react native)
