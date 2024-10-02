@@ -1,9 +1,0 @@
-# dependencies
-/node_modules
-
-# files program creates
-/db/*
-!/db
-
-/images/*
-!/images
