@@ -1,4 +1,4 @@
-# music-streamer
+# js-music-streamer
 Self-hosted JavaScript music streaming service. Host backend on your own server, use frontends to connect and stream your own music files as you please.
 
 Backend:
